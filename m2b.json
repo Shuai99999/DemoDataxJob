@@ -1,0 +1,61 @@
+{
+  "job": {
+    "setting": {
+      "speed": {
+        "channel": 8
+      },
+      "errorLimit": {
+        "record": 0,
+        "percentage": 0.02
+      }
+    },
+    "content": [
+      {
+        "reader": {
+          "name": "mysqlreader",
+          "parameter": {
+            "username": "xxx",
+            "password": "xxx",
+            "column": [
+              <mycol>
+            ],
+            "fetchSize":102400,
+            "where": "",
+            "splitPk": "<myPk>",
+            "connection": [
+              {
+                "querySql": [
+                            "<query>"
+                            ],
+                "jdbcUrl": [
+                  "jdbc:mysql://<slave_ip>:<slave_port>/<schema>?userCompress=true&useCursorFetch=true&useUnicode=true&characterEncoding=utf-8&useSSL=false"
+                ]
+              }
+            ]
+          }
+        },
+        "writer": {
+          "name": "hdfswriter",
+          "parameter": {
+            "defaultFS": "hdfs://nameservice1/",
+            "hadoopConfig": {
+              "dfs.nameservices": "nameservice1",
+              "dfs.ha.namenodes.nameservice1": "namenode142,namenode35",
+              "dfs.namenode.rpc-address.nameservice1.namenode142": "10.246.86.47:8020",
+              "dfs.namenode.rpc-address.nameservice1.namenode35": "10.246.86.43:8020",
+              "dfs.client.failover.proxy.provider.nameservice1": "org.apache.hadoop.hdfs.server.namenode.ha.ConfiguredFailoverProxyProvider"
+            },
+            "fileType": "orc",
+            "path": "/warehouse/tablespace/external/hive/archive_mysql_db.db/<schema>_<table_name>",
+            "fileName": "<table_name>",
+            "writeMode": "append",
+            "fieldDelimiter": "\u0001",
+            "column": [
+             <bigcol>
+            ]
+          }
+        }
+      }
+    ]
+  }
+}
